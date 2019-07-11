@@ -65,3 +65,28 @@ Asteroid.prototype.draw = function(context, guide) {
     });
     context.restore();
 }
+
+// Mass(x, y, mass, radius, angle, x_speed, y_speed, rotate_speed) 
+function Ship(x, y, mass, radius) {
+    // Does Ship need density? Or directly give it radius?
+    // let density = 1;
+    // let radius = Math.sqrt((mass / density) / Math.PI);
+    // Does it need ", x_speed, y_speed, rotate_speed" in Mass.call()?
+    Mass.call(this, x, y, mass, radius, Math.PI * 1.5);
+}
+Ship.prototype = Object.create(Mass.prototype);
+Ship.prototype.constructor = Ship;
+
+Ship.prototype.draw = function(context, guide) {
+    context.save();
+    context.translate(this.x, this.y);
+    context.rotate(this.angle);
+    draw_ship(context, this.radius, {
+        guide: guide
+    });
+    context.restore();
+}
+
+// Ship.prototype.update = function(elapsed) {
+//     Mass.apply(this, arguments);
+// }

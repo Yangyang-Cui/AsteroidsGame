@@ -27,14 +27,22 @@
         asteroid.moving((Math.PI * 2) * Math.random(), 1000, 60)
         asteroid.twist((Math.random() - 0.5) * 100, 60);
 
+        let ship = new Ship(
+            canvas.width * Math.random(),
+            canvas.height * Math.random(),
+            10, 20
+        );
+
         function draw() {
             context.clearRect(0, 0, canvas.width, canvas.height);
             draw_grid(context);
             asteroid.draw(context, guide);
+            ship.draw(context, guide);
         }
 
         function update(elapsed, canvas) {
             asteroid.update(elapsed, canvas);
+            ship.update(elapsed, canvas);
         }
 
         let previous;
