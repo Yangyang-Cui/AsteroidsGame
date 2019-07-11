@@ -16,8 +16,8 @@
     <h1>Asteroid</h1>
     <canvas id="asteroid" width="600" height="600" tabindex="1"></canvas>
     <script>
-        let context = document.getElementById("asteroid");
-        let c = context.getContext("2d");
+        let canvas = document.getElementById("asteroid");
+        let c = canvas.getContext("2d");
         let shape = [];
         let segments = 13;
         for (let i = 0; i < segments; i++) {
@@ -25,7 +25,7 @@
         }
 
         function draw() {
-            c.clearRect(0, 0, context.width, context.height);
+            c.clearRect(0, 0, canvas.width, canvas.height);
             draw_grid(c);
 
             draw_asteroid(c, 20, shape);
