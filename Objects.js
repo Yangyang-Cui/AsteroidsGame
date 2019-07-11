@@ -28,13 +28,13 @@ Mass.prototype.update = function(elapsed, canvas) {
 }
 
 Mass.prototype.moving = function(angle, force, elapsed) {
-    this.x_speed += Math.cos(angle) * this.radius * force * elapsed;
-    this.y_speed += Math.sin(angle) * this.radius * force * elapsed;
+    this.x_speed += Math.cos(angle) * force * elapsed / this.mass;
+    this.y_speed += Math.sin(angle) * force * elapsed / this.mass;
 }
 
 // Does it need angle?
 Mass.prototype.twist = function(force, elapsed) {
-    this.rotate_speed += Math.PI * 2 * force * elapsed;
+    this.rotate_speed += force * elapsed / this.mass;
 }
 
 // Test Mass
