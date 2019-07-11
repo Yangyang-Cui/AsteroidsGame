@@ -1,0 +1,18 @@
+body {
+    background-color: #666699;
+    color: ivory;
+    text-align: center;
+}
+
+canvas {
+    background-color: black;
+    border: 10px solid white;
+}
+
+canvas:focus {
+    border: 10px solid gray;
+}
+
+p {
+    color: gray;
+}
