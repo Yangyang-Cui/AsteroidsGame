@@ -24,7 +24,8 @@ Mass.prototype.update = function(elapsed, canvas) {
     }
     this.x += this.x_speed * elapsed;
     this.y += this.y_speed * elapsed;
-    this.angle += (this.rotate_speed * elapsed) % (Math.PI * 2);
+    this.angle += (this.rotate_speed * elapsed);
+    this.angle %= (Math.PI * 2);
 }
 
 Mass.prototype.moving = function(angle, force, elapsed) {
@@ -32,19 +33,35 @@ Mass.prototype.moving = function(angle, force, elapsed) {
     this.y_speed += Math.sin(angle) * force * elapsed / this.mass;
 }
 
-// Does it need angle?
 Mass.prototype.twist = function(force, elapsed) {
     this.rotate_speed += force * elapsed / this.mass;
 }
 
-// Test Mass
-Mass.prototype.draw = function(context) {
+// Mass(x, y, mass, radius, angle, x_speed, y_speed, rotate_speed) 
+function Asteroid(x, y, mass, x_speed, y_speed, rotate_speed) {
+    let density = 1;
+    let radius = Math.sqrt((mass / density) / Math.PI);
+    Mass.call(this, x, y, mass, radius, 0, x_speed, y_speed, rotate_speed);
+    this.noise = 0.2;
+    this.shape = [];
+    this.circumference = 2 * Math.PI * this.radius;
+    this.segments = this.circumference / 15;
+    this.segments = Math.max(5, Math.min(25, this.segments));
+    for (let i = 0; i < this.segments; i++) {
+        this.shape.push(Math.random() - 0.5);
+    }
+}
+
+Asteroid.prototype = Object.create(Mass.prototype);
+Asteroid.prototype.constructor = Asteroid;
+
+Asteroid.prototype.draw = function(context, guide) {
     context.save();
-    context.lineWidth = 1.25;
-    context.fillStyle = "ivory";
-    context.strokeStyle = "ivory";
-    context.beginPath();
-    context.rect(this.x, this.y, 20, 20);
-    context.fill();
+    context.translate(this.x, this.y);
+    context.rotate(this.angle);
+    draw_asteroid(context, this.radius, this.shape, {
+        guide: guide,
+        noise: this.noise
+    });
     context.restore();
 }

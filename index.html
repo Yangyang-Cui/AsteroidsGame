@@ -17,25 +17,24 @@
     <canvas id="asteroid" width="600" height="600" tabindex="1"></canvas>
     <script>
         let canvas = document.getElementById("asteroid");
-        let c = canvas.getContext("2d");
-        let shape = [];
-        let segments = 13;
-        let mass = new Mass(canvas.width / 2, canvas.height / 2, 100, 50, 0.25 * Math.PI);
-        for (let i = 0; i < segments; i++) {
-            shape.push(Math.random() - 0.5);
-        }
+        let context = canvas.getContext("2d");
+        let guide = true;
+        let asteroid = new Asteroid(
+            canvas.width * Math.random(),
+            canvas.height * Math.random(),
+            10000);
+
+        asteroid.moving((Math.PI * 2) * Math.random(), 1000, 60)
+        asteroid.twist((Math.random() - 0.5) * 100, 60);
 
         function draw() {
-            c.clearRect(0, 0, canvas.width, canvas.height);
-            draw_grid(c);
-            mass.draw(c);
-            // draw_asteroid(c, 20, shape);
-            // c.translate(200, 200);
-            // draw_ship(c, 30)
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            draw_grid(context);
+            asteroid.draw(context, guide);
         }
 
         function update(elapsed, canvas) {
-            mass.update(elapsed, canvas);
+            asteroid.update(elapsed, canvas);
         }
 
         let previous;

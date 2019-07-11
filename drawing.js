@@ -33,7 +33,7 @@ function draw_asteroid(c, radius, shape, options) {
     c.fillStyle = "gray";
     c.lineWidth = 1.25;
     let angle = Math.PI * 2 / shape.length;
-    let noise = 0.3;
+    let noise = options.noise;
     // Draw asteroid
     c.beginPath();
     c.save();
