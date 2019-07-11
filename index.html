@@ -7,6 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Asteroid</title>
     <link rel="stylesheet" href="style.css">
+    <script src="./drawing.js"></script>
+    <script src="./Objects.js"></script>
+    <script src="./game.js"></script>
 </head>
 
 <body>
@@ -15,6 +18,36 @@
     <script>
         let context = document.getElementById("asteroid");
         let c = context.getContext("2d");
+        let shape = [];
+        let segments = 13;
+        for (let i = 0; i < segments; i++) {
+            shape.push(Math.random() - 0.5);
+        }
+
+        function draw() {
+            c.clearRect(0, 0, context.width, context.height);
+            draw_grid(c);
+
+            draw_asteroid(c, 20, shape);
+            c.translate(200, 200);
+            draw_ship(c, 30)
+        }
+
+        function update() {
+
+        }
+
+        let previous;
+
+        function frame(timestamp) {
+            if (!previous) previous = timestamp;
+            let elapsed = timestamp - previous;
+            update(elapsed / 1000);
+            draw();
+            previous = timestamp;
+            window.requestAnimationFrame(frame);
+        }
+        window.requestAnimationFrame(frame);
     </script>
 </body>
 
