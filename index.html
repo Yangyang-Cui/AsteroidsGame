@@ -33,6 +33,40 @@
             10, 20
         );
 
+        // Control ship
+        function key_handle(e, value) {
+            let handled_nothing = false;
+            switch (e.key || e.keyCode) {
+                case 38:
+                case "ArrowUp":
+                    ship.go_forward = value;
+                    break;
+                case 37:
+                case "ArrowLeft":
+                    ship.turn_left = value;
+                    break;
+                case 39:
+                case "ArrowRight":
+                    ship.turn_right = value;
+                    break;
+                case 40:
+                case "ArrowDown":
+                    ship.go_backward = value;
+                    break;
+                case 71:
+                case "g":
+                    if (value) guide = !guide;
+                    break;
+                case 32:
+                case " ":
+                    ship.fire_on = value;
+                    break;
+                default:
+                    handled_nothing = true;
+            }
+            if (!handled_nothing) e.preventDefault();
+        }
+
         function draw() {
             context.clearRect(0, 0, canvas.width, canvas.height);
             draw_grid(context);
