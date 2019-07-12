@@ -73,6 +73,14 @@ Asteroid.prototype.draw = function(context, guide) {
     });
     context.restore();
 }
+Asteroid.prototype.child = function(mass) {
+    return new Asteroid(
+        this.x, this.y,
+        mass,
+        this.x_speed, this.y_speed,
+        this.rotate_speed
+    );
+}
 
 // Mass(x, y, mass, radius, angle, x_speed, y_speed, rotate_speed) 
 function Ship(x, y, mass, radius, move_power, projectile_force) {
