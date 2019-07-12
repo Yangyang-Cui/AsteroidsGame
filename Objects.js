@@ -75,7 +75,7 @@ Asteroid.prototype.draw = function(context, guide) {
 }
 
 // Mass(x, y, mass, radius, angle, x_speed, y_speed, rotate_speed) 
-function Ship(x, y, mass, radius, move_power) {
+function Ship(x, y, mass, radius, move_power, projectile_force) {
     // Does Ship need density? Or directly give it radius?
     // let density = 1;
     // let radius = Math.sqrt((mass / density) / Math.PI);
@@ -88,7 +88,7 @@ function Ship(x, y, mass, radius, move_power) {
     this.fire_on = false;
     this.move_power = move_power;
     this.turn_power = this.move_power / 20;
-
+    this.projectile_force = projectile_force;
 }
 Ship.prototype = Object.create(Mass.prototype);
 Ship.prototype.constructor = Ship;
@@ -110,4 +110,39 @@ Ship.prototype.update = function(elapsed) {
     Mass.prototype.update.apply(this, arguments);
     this.moving(this.angle, (this.go_forward - this.go_backward) * this.move_power, elapsed);
     this.twist((this.turn_right - this.turn_left) * this.turn_power, elapsed);
+}
+Ship.prototype.projectile = function(elapsed) {
+    let p = new Projectile(1,
+        this.x + Math.cos(this.angle) * this.radius,
+        this.y + Math.sin(this.angle) * this.radius,
+        0.0025,
+        this.x_speed,
+        this.y_speed,
+        this.rotate_speed);
+    p.moving(this.angle, this.projectile_force, elapsed);
+    this.moving(this.angle + Math.PI, this.projectile_force, elapsed);
+    return p;
+}
+
+// Mass(x, y, mass, radius, angle, x_speed, y_speed, rotate_speed) 
+function Projectile(lifetime, x, y, mass, x_speed, y_speed, rotate_speed) {
+    let density = 0.001;
+    let radius = Math.sqrt((mass / density) / Math.PI);
+    Mass.call(this, x, y, mass, radius, 0, x_speed, y_speed, rotate_speed);
+    this.lifetime = lifetime;
+    this.life = 1;
+}
+Projectile.prototype = Object.create(Mass.prototype);
+Projectile.prototype.constructor = Projectile;
+
+Projectile.prototype.draw = function(context) {
+    context.save();
+    context.translate(this.x, this.y);
+    context.rotate(this.angle);
+    draw_projectile(context, this.radius, this.life);
+    context.restore();
+}
+Projectile.prototype.update = function(elapsed) {
+    Mass.prototype.update.apply(this, arguments);
+    this.life -= (elapsed / this.lifetime);
 }
