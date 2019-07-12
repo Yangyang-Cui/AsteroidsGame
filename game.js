@@ -62,13 +62,13 @@ AsteroidsGame.prototype.asteroid_live = function(elapsed) {
 }
 
 AsteroidsGame.prototype.split_asteroid = function(asteroid, elapsed) {
-    this.asteroid_mass -= this.damaged_mass;
+    asteroid.mass -= this.damaged_mass;
     this.score += this.damaged_mass;
-    let split_rate = 0.25 + (Math.random() - 0.5) * 0.5;
-    as1 = asteroid.child(this.asteroid_mass * split_rate);
-    as2 = asteroid.child(this.asteroid_mass * (1 - split_rate));
+    let split_rate = 0.25 + Math.random() * 0.5;
+    as1 = asteroid.child(asteroid.mass * split_rate);
+    as2 = asteroid.child(asteroid.mass * (1 - split_rate));
     [as1, as2].forEach(function(child) {
-        if (child.mass < this.damaged_mass) {
+        if (child.mass <= this.damaged_mass) {
             this.score += child.mass;
         } else {
             this.asteroids.push(child);
@@ -121,6 +121,7 @@ AsteroidsGame.prototype.draw = function() {
             }, this);
         }, this);
     }
+
     this.asteroids.forEach(function(asteroid) {
         asteroid.draw(this.c, this.guide);
     }, this);
@@ -131,8 +132,12 @@ AsteroidsGame.prototype.draw = function() {
 }
 
 AsteroidsGame.prototype.update = function(elapsed) {
+    this.ship.compromised = false;
     this.asteroids.forEach(function(asteroid) {
         asteroid.update(elapsed, this.canvas);
+        if (this.guide && collision(asteroid, this.ship)) {
+            this.ship.compromised = true;
+        }
     }, this);
     this.ship.update(elapsed, this.canvas);
     this.projectiles.forEach(function(projectile, i) {

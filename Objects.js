@@ -92,6 +92,7 @@ function Ship(x, y, mass, radius, move_power, projectile_force) {
     this.projectile_reload_time = 0.35;
     this.until_reload_time = this.projectile_reload_time;
     this.projectile_reload = false;
+    this.compromised = false;
 }
 Ship.prototype = Object.create(Mass.prototype);
 Ship.prototype.constructor = Ship;
@@ -102,7 +103,8 @@ Ship.prototype.draw = function(context, guide) {
     context.rotate(this.angle);
     draw_ship(context, this.radius, {
         guide: guide,
-        thruster_on: this.go_forward
+        thruster_on: this.go_forward,
+        compromised: this.compromised
     });
     context.restore();
 }
