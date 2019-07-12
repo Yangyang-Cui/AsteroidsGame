@@ -87,7 +87,7 @@ function Ship(x, y, mass, radius, move_power, projectile_force) {
     this.go_backward = false;
     this.fire_on = false;
     this.move_power = move_power;
-    this.turn_power = this.move_power / 20;
+    this.turn_power = this.move_power / 50;
     this.projectile_force = projectile_force;
 }
 Ship.prototype = Object.create(Mass.prototype);
