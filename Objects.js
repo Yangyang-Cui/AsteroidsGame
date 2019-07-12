@@ -89,6 +89,9 @@ function Ship(x, y, mass, radius, move_power, projectile_force) {
     this.move_power = move_power;
     this.turn_power = this.move_power / 50;
     this.projectile_force = projectile_force;
+    this.projectile_reload_time = 0.35;
+    this.until_reload = this.projectile_reload_time;
+    this.projectile_reload = false;
 }
 Ship.prototype = Object.create(Mass.prototype);
 Ship.prototype.constructor = Ship;
@@ -105,11 +108,14 @@ Ship.prototype.draw = function(context, guide) {
 }
 
 // Mass.prototype.moving = function(angle, force, elapsed)
-// angle ?
 Ship.prototype.update = function(elapsed) {
     Mass.prototype.update.apply(this, arguments);
     this.moving(this.angle, (this.go_forward - this.go_backward) * this.move_power, elapsed);
     this.twist((this.turn_right - this.turn_left) * this.turn_power, elapsed);
+    this.projectile_reload = this.until_reload == 0;
+    if (!this.projectile_reload) {
+        this.until_reload -= Math.min(elapsed, this.until_reload);
+    }
 }
 Ship.prototype.projectile = function(elapsed) {
     let p = new Projectile(1,
@@ -121,6 +127,7 @@ Ship.prototype.projectile = function(elapsed) {
         this.rotate_speed);
     p.moving(this.angle, this.projectile_force, elapsed);
     this.moving(this.angle + Math.PI, this.projectile_force, elapsed);
+    this.until_reload = this.projectile_reload_time;
     return p;
 }
 

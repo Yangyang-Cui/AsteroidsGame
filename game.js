@@ -149,7 +149,7 @@ AsteroidsGame.prototype.update = function(elapsed) {
             }, this);
         }
     }, this);
-    if (this.ship.fire_on) {
+    if (this.ship.fire_on && this.projectile_reload) {
         this.projectiles.push(this.ship.projectile(elapsed));
     }
 }
