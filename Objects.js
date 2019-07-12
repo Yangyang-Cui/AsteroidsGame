@@ -76,10 +76,6 @@ Asteroid.prototype.child = function(mass) {
 
 // Mass(x, y, mass, radius, angle, x_speed, y_speed, rotate_speed) 
 function Ship(x, y, mass, radius, move_power, projectile_force) {
-    // Does Ship need density? Or directly give it radius?
-    // let density = 1;
-    // let radius = Math.sqrt((mass / density) / Math.PI);
-    // Does it need ", x_speed, y_speed, rotate_speed" in Mass.call()?
     Mass.call(this, x, y, mass, radius, Math.PI * 1.5);
     this.go_forward = false;
     this.turn_left = false;

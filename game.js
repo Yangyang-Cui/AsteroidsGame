@@ -10,12 +10,9 @@ function AsteroidsGame(id) {
     this.canvas = document.getElementById(id);
     this.c = this.canvas.getContext("2d");
     this.guide = true;
-    this.asteroids = [];
-    this.score = 0;
     this.damaged_mass = 1000;
     this.asteroid_mass = 10000;
     this.asteroid_force = 5000000;
-    this.asteroids.push(this.asteroid_live());
     this.ship_mass = 10;
     this.move_power = 1000;
     this.projectile_force = 200;
@@ -39,7 +36,15 @@ function AsteroidsGame(id) {
     this.score_indicator = new NumberIndicator(
         "Score", this.canvas.width - 150, 15
     );
+    this.reset();
     window.requestAnimationFrame(this.frame.bind(this));
+}
+
+AsteroidsGame.prototype.reset = function() {
+    this.score = 0;
+    this.asteroids = [];
+    this.asteroids.push(this.asteroid_live());
+
 }
 
 AsteroidsGame.prototype.keyDown = function(e) {
