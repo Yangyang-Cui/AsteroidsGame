@@ -30,7 +30,7 @@
         let ship = new Ship(
             canvas.width * Math.random(),
             canvas.height * Math.random(),
-            10, 20
+            10, 20, 100
         );
 
         // Control ship
@@ -66,10 +66,19 @@
             }
             if (!handled_nothing) e.preventDefault();
         }
+        canvas.addEventListener("keydown", function(e) {
+            key_handle(e, true);
+        }, true);
+        canvas.addEventListener("keyup", function(e) {
+            key_handle(e, false);
+        }, true);
+        canvas.focus();
 
         function draw() {
             context.clearRect(0, 0, canvas.width, canvas.height);
-            draw_grid(context);
+            if (guide) {
+                draw_grid(context);
+            }
             asteroid.draw(context, guide);
             ship.draw(context, guide);
         }

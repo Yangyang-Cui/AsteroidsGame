@@ -67,12 +67,20 @@ Asteroid.prototype.draw = function(context, guide) {
 }
 
 // Mass(x, y, mass, radius, angle, x_speed, y_speed, rotate_speed) 
-function Ship(x, y, mass, radius) {
+function Ship(x, y, mass, radius, move_power) {
     // Does Ship need density? Or directly give it radius?
     // let density = 1;
     // let radius = Math.sqrt((mass / density) / Math.PI);
     // Does it need ", x_speed, y_speed, rotate_speed" in Mass.call()?
     Mass.call(this, x, y, mass, radius, Math.PI * 1.5);
+    this.go_forward = false;
+    this.turn_left = false;
+    this.turn_right = false;
+    this.go_backward = false;
+    this.fire_on = false;
+    this.move_power = move_power;
+    this.turn_power = this.move_power / 20;
+
 }
 Ship.prototype = Object.create(Mass.prototype);
 Ship.prototype.constructor = Ship;
@@ -82,11 +90,16 @@ Ship.prototype.draw = function(context, guide) {
     context.translate(this.x, this.y);
     context.rotate(this.angle);
     draw_ship(context, this.radius, {
-        guide: guide
+        guide: guide,
+        thruster_on: this.go_forward
     });
     context.restore();
 }
 
-// Ship.prototype.update = function(elapsed) {
-//     Mass.apply(this, arguments);
-// }
+// Mass.prototype.moving = function(angle, force, elapsed)
+// angle ?
+Ship.prototype.update = function(elapsed) {
+    Mass.prototype.update.apply(this, arguments);
+    this.moving(this.angle, (this.go_forward - this.go_backward) * this.move_power, elapsed);
+    this.twist((this.turn_right - this.turn_left) * this.turn_power, elapsed);
+}
