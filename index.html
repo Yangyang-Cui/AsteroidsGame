@@ -22,24 +22,27 @@
         let asteroids = [];
         let score = 0;
         let damaged_mass = 500;
+        let asteroid_mass = 10000;
+        let asteroid_force = 5000000;
 
         function create_asteroid() {
             return new Asteroid(
                 canvas.width * Math.random(),
                 canvas.height * Math.random(),
-                10000
+                asteroid_mass
             );
         }
         // Mass.prototype.moving = function(angle, force, elapsed)
         // Mass.prototype.twist = function(force, elapsed) 
-        function moving(asteroid, force, elapsed) {
-            asteroid.moving((Math.PI * 2) * Math.random(), force, elapsed)
-            asteroid.twist((Math.random() - 0.5) * force * 0.1, elapsed);
+        function asteroid_live_moving(asteroid, elapsed) {
+            elapsed = elapsed || 0.016;
+            asteroid.moving((Math.PI * 2) * Math.random(), asteroid_force, elapsed)
+            asteroid.twist((Math.random() - 0.5) * asteroid_force * 0.01, elapsed);
         }
 
-        function asteroid_live() {
+        function asteroid_live(elapsed) {
             let asteroid = create_asteroid();
-            moving(asteroid, 1000, 60);
+            asteroid_live_moving(asteroid, elapsed);
             return asteroid;
         }
         asteroids.push(asteroid_live());
@@ -54,7 +57,8 @@
                 if (child.mass <= damaged_mass) {
                     score += child.mass;
                 } else {
-                    asteroid.push(child);
+                    asteroids.push(child);
+                    asteroid_live_moving(asteroid, elapsed);
                 }
             })
         }
@@ -67,8 +71,8 @@
         // asteroid.twist((Math.random() - 0.5) * 100, 60);
 
         let ship = new Ship(
-            canvas.width * Math.random(),
-            canvas.height * Math.random(),
+            canvas.width / 2,
+            canvas.height / 2,
             10, 20, 1000, 200
         );
         let projectiles = [];
@@ -118,8 +122,9 @@
             asteroids.forEach(function(asteroid, i, asteroids) {
                 projectiles.forEach(function(projectile, j, projectiles) {
                     draw_line(context, asteroid, projectile);
-                })
-            })
+                });
+                draw_line(context, asteroid, ship);
+            });
             context.clearRect(0, 0, canvas.width, canvas.height);
             if (guide) {
                 draw_grid(context);
@@ -147,8 +152,9 @@
                     asteroids.forEach(function(asteroid, j) {
                         if (collision(asteroid, projectile)) {
                             projectiles.splice(j, 1);
+                            asteroids.splice(j, 1);
+                            asteroid_split(asteroid);
                         }
-                        asteroid_split(asteroid);
                     })
                 }
             });
