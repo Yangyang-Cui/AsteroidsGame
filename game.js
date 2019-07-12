@@ -38,7 +38,7 @@ AsteroidsGame.prototype.keyDown = function(e) {
     this.key_handle(e, true);
 }
 AsteroidsGame.prototype.keyUp = function(e) {
-    this.key_handle(e, true);
+    this.key_handle(e, false);
 }
 
 AsteroidsGame.prototype.create_asteroid = function() {
