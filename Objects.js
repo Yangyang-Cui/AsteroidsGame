@@ -90,7 +90,7 @@ function Ship(x, y, mass, radius, move_power, projectile_force) {
     this.turn_power = this.move_power / 50;
     this.projectile_force = projectile_force;
     this.projectile_reload_time = 0.35;
-    this.until_reload = this.projectile_reload_time;
+    this.until_reload_time = this.projectile_reload_time;
     this.projectile_reload = false;
 }
 Ship.prototype = Object.create(Mass.prototype);
@@ -112,22 +112,22 @@ Ship.prototype.update = function(elapsed) {
     Mass.prototype.update.apply(this, arguments);
     this.moving(this.angle, (this.go_forward - this.go_backward) * this.move_power, elapsed);
     this.twist((this.turn_right - this.turn_left) * this.turn_power, elapsed);
-    this.projectile_reload = this.until_reload == 0;
+    this.projectile_reload = this.until_reload_time === 0;
     if (!this.projectile_reload) {
-        this.until_reload -= Math.min(elapsed, this.until_reload);
+        this.until_reload_time -= Math.min(elapsed, this.until_reload_time);
     }
 }
 Ship.prototype.projectile = function(elapsed) {
     let p = new Projectile(1,
         this.x + Math.cos(this.angle) * this.radius,
         this.y + Math.sin(this.angle) * this.radius,
-        0.0025,
+        0.025,
         this.x_speed,
         this.y_speed,
         this.rotate_speed);
     p.moving(this.angle, this.projectile_force, elapsed);
     this.moving(this.angle + Math.PI, this.projectile_force, elapsed);
-    this.until_reload = this.projectile_reload_time;
+    this.until_reload_time = this.projectile_reload_time;
     return p;
 }
 
@@ -137,7 +137,7 @@ function Projectile(lifetime, x, y, mass, x_speed, y_speed, rotate_speed) {
     let radius = Math.sqrt((mass / density) / Math.PI);
     Mass.call(this, x, y, mass, radius, 0, x_speed, y_speed, rotate_speed);
     this.lifetime = lifetime;
-    this.life = 1;
+    this.life = 1.5;
 }
 Projectile.prototype = Object.create(Mass.prototype);
 Projectile.prototype.constructor = Projectile;

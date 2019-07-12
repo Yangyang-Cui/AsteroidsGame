@@ -12,7 +12,7 @@ function AsteroidsGame(id) {
     this.guide = true;
     this.asteroids = [];
     this.score = 0;
-    this.damaged_mass = 500;
+    this.damaged_mass = 1000;
     this.asteroid_mass = 10000;
     this.asteroid_force = 5000000;
     this.asteroids.push(this.asteroid_live());
@@ -149,7 +149,7 @@ AsteroidsGame.prototype.update = function(elapsed) {
             }, this);
         }
     }, this);
-    if (this.ship.fire_on && this.projectile_reload) {
+    if (this.ship.fire_on && this.ship.projectile_reload) {
         this.projectiles.push(this.ship.projectile(elapsed));
     }
 }

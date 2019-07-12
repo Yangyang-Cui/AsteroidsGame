@@ -30,7 +30,7 @@ function draw_grid(c, options) {
 function draw_asteroid(c, radius, shape, options) {
     options = options || {};
     c.strokeStyle = "rgb(220,150,120)";
-    c.fillStyle = "#ff8080";
+    c.fillStyle = "rgba(100%,100%,100%, 50%)";
     c.lineWidth = 1.25;
     let angle = Math.PI * 2 / shape.length;
     let noise = options.noise;
