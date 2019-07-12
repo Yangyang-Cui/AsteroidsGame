@@ -19,13 +19,36 @@
         let canvas = document.getElementById("asteroid");
         let context = canvas.getContext("2d");
         let guide = true;
-        let asteroid = new Asteroid(
-            canvas.width * Math.random(),
-            canvas.height * Math.random(),
-            10000);
+        let asteroids = [];
 
-        asteroid.moving((Math.PI * 2) * Math.random(), 1000, 60)
-        asteroid.twist((Math.random() - 0.5) * 100, 60);
+        function create_asteroid() {
+            return new Asteroid(
+                canvas.width * Math.random(),
+                canvas.height * Math.random(),
+                10000
+            );
+        }
+        // Mass.prototype.moving = function(angle, force, elapsed)
+        // Mass.prototype.twist = function(force, elapsed) 
+        function moving(asteroid, force, elapsed) {
+            asteroid.moving((Math.PI * 2) * Math.random(), force, elapsed)
+            asteroid.twist((Math.random() - 0.5) * force * 0.1, elapsed);
+        }
+
+        function asteroid_live() {
+            let asteroid = create_asteroid();
+            moving(asteroid, 1000, 60);
+            return asteroid;
+        }
+        asteroids.push(asteroid_live());
+
+        // let asteroid = new Asteroid(
+        //     canvas.width * Math.random(),
+        //     canvas.height * Math.random(),
+        //     10000);
+
+        // asteroid.moving((Math.PI * 2) * Math.random(), 1000, 60)
+        // asteroid.twist((Math.random() - 0.5) * 100, 60);
 
         let ship = new Ship(
             canvas.width * Math.random(),
@@ -33,6 +56,7 @@
             10, 20, 1000, 200
         );
         let projectiles = [];
+
         // Control ship
         function key_handle(e, value) {
             let handled_nothing = false;
@@ -79,7 +103,9 @@
             if (guide) {
                 draw_grid(context);
             }
-            asteroid.draw(context, guide);
+            asteroids.forEach(function(asteroid) {
+                asteroid.draw(context, guide);
+            })
             ship.draw(context, guide);
             projectiles.forEach(function(projectile) {
                 projectile.draw(context);
@@ -87,7 +113,9 @@
         }
 
         function update(elapsed, canvas) {
-            asteroid.update(elapsed, canvas);
+            asteroids.forEach(function(asteroid) {
+                asteroid.update(elapsed, canvas);
+            });
             ship.update(elapsed, canvas);
             projectiles.forEach(function(projectile, i) {
                 projectile.update(elapsed, canvas);
