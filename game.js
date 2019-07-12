@@ -31,6 +31,11 @@ function AsteroidsGame(id) {
     this.canvas.addEventListener("keydown", this.keyDown.bind(this), true);
     this.canvas.addEventListener("keyup", this.keyUp.bind(this), true);
     this.canvas.focus();
+    this.health_indicator = new Indicator(
+        "Health", 15, 15, 100, 15
+    );
+    this.total_health = 2;
+    this.health = this.total_health;
     window.requestAnimationFrame(this.frame.bind(this));
 }
 
@@ -121,7 +126,7 @@ AsteroidsGame.prototype.draw = function() {
             }, this);
         }, this);
     }
-
+    this.health_indicator.draw(this.c, this.health, this.total_health);
     this.asteroids.forEach(function(asteroid) {
         asteroid.draw(this.c, this.guide);
     }, this);
@@ -135,10 +140,13 @@ AsteroidsGame.prototype.update = function(elapsed) {
     this.ship.compromised = false;
     this.asteroids.forEach(function(asteroid) {
         asteroid.update(elapsed, this.canvas);
-        if (this.guide && collision(asteroid, this.ship)) {
+        if (collision(asteroid, this.ship)) {
             this.ship.compromised = true;
         }
     }, this);
+    if (this.ship.compromised) {
+        this.health -= Math.min(elapsed, this.health);
+    }
     this.ship.update(elapsed, this.canvas);
     this.projectiles.forEach(function(projectile, i) {
         projectile.update(elapsed, this.canvas);

@@ -155,3 +155,29 @@ Projectile.prototype.update = function(elapsed) {
     Mass.prototype.update.apply(this, arguments);
     this.life -= (elapsed / this.lifetime);
 }
+
+
+function Indicator(label, x, y, width, height) {
+    this.label = label + ": ";
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+    this.pt = 14;
+}
+
+Indicator.prototype.draw = function(c, ship_health, ship_total_health) {
+    c.save();
+    c.fillStyle = "ivory";
+    c.strokeStyle = "ivory";
+    c.font = this.pt + "pt Arial";
+    c.fillText(this.label, this.x, this.y + this.height - 1);
+    let offset = c.measureText(this.label).width;
+    c.beginPath();
+    c.rect(this.x + offset, this.y, this.width, this.height);
+    c.stroke();
+    c.beginPath();
+    c.rect(this.x + offset, this.y, this.width * (ship_health / ship_total_health), this.height);
+    c.fill();
+    c.restore();
+}
