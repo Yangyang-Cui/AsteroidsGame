@@ -36,6 +36,9 @@ function AsteroidsGame(id) {
     );
     this.total_health = 2;
     this.health = this.total_health;
+    this.score_indicator = new NumberIndicator(
+        "Score", this.canvas.width - 150, 15
+    );
     window.requestAnimationFrame(this.frame.bind(this));
 }
 
@@ -127,6 +130,7 @@ AsteroidsGame.prototype.draw = function() {
         }, this);
     }
     this.health_indicator.draw(this.c, this.health, this.total_health);
+    this.score_indicator.draw(this.c, this.score);
     this.asteroids.forEach(function(asteroid) {
         asteroid.draw(this.c, this.guide);
     }, this);

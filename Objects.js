@@ -181,3 +181,21 @@ Indicator.prototype.draw = function(c, ship_health, ship_total_health) {
     c.fill();
     c.restore();
 }
+
+function NumberIndicator(label, x, y) {
+    this.label = label + ": ";
+    this.x = x;
+    this.y = y;
+    this.pt = 14;
+}
+
+NumberIndicator.prototype.draw = function(c, score) {
+    c.save();
+    c.fillStyle = "ivory";
+    c.strokeStyle = "ivory";
+    c.font = this.pt + "pt Arial";
+    c.fillText(this.label, this.x, this.y + this.pt - 1);
+    let offset = c.measureText(this.label).width;
+    c.fillText(Math.floor(score), this.x + offset, this.y + this.pt - 1);
+    c.restore();
+}
