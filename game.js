@@ -9,7 +9,7 @@ function distance(obj1, obj2) {
 function AsteroidsGame(id) {
     this.canvas = document.getElementById(id);
     this.c = this.canvas.getContext("2d");
-    this.guide = true;
+    this.guide = false;
     this.damaged_mass = 1000;
     this.asteroid_mass = 10000;
     this.asteroid_force = 5000000;
@@ -31,12 +31,10 @@ function AsteroidsGame(id) {
         "Health", 15, 15, 100, 15
     );
     this.score_indicator = new NumberIndicator(
-        "Score", this.canvas.width - 150, 15
+        "Score", this.canvas.width - 100, 15
     );
     this.level_indicator = new NumberIndicator(
-        "Level", this.canvas.width / 2, 15, {
-            textAlign: "center"
-        }
+        "Level", this.canvas.width / 2, 15
     );
     this.game_over_indicator = new GameOverIndicator(
         "GAME OVER", "Please press space bar to play again.",

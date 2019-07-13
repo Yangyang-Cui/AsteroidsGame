@@ -183,19 +183,16 @@ function NumberIndicator(label, x, y) {
     this.x = x;
     this.y = y;
     this.pt = 14;
+    this.digit = 0;
 }
 
-NumberIndicator.prototype.draw = function(c, score, options) {
-    options = options || {};
+NumberIndicator.prototype.draw = function(c, score) {
     c.save();
     c.fillStyle = "ivory";
     c.strokeStyle = "ivory";
-    // c.textAlign = "center";
-    c.textAlign = options.textAlign || "left";
+    c.textAlign = "center";
     c.font = this.pt + "pt Arial";
-    c.fillText(this.label, this.x, this.y + this.pt - 1);
-    let offset = c.measureText(this.label).width;
-    c.fillText(Math.floor(score), this.x + offset, this.y + this.pt - 1);
+    c.fillText(this.label + score.toFixed(this.digit), this.x, this.y + this.pt - 1);
     c.restore();
 }
 
