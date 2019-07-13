@@ -24,20 +24,24 @@ function AsteroidsGame(id) {
         this.move_power,
         this.projectile_force
     );
-    this.projectiles = [];
     this.canvas.addEventListener("keydown", this.keyDown.bind(this), true);
     this.canvas.addEventListener("keyup", this.keyUp.bind(this), true);
     this.canvas.focus();
     this.health_indicator = new Indicator(
         "Health", 15, 15, 100, 15
     );
-    this.total_health = 2;
-    this.health = this.total_health;
     this.score_indicator = new NumberIndicator(
         "Score", this.canvas.width - 150, 15
     );
     this.level_indicator = new NumberIndicator(
-        "Level", this.canvas.width / 2, 15
+        "Level", this.canvas.width / 2, 15, {
+            textAlign: "center"
+        }
+    );
+    this.game_over_indicator = new GameOverIndicator(
+        "GAME OVER", "Please press space bar to play again.",
+        this.canvas.width / 2,
+        this.canvas.height * 0.4
     );
     this.reset();
 
@@ -46,8 +50,11 @@ function AsteroidsGame(id) {
 
 AsteroidsGame.prototype.reset = function() {
     this.score = 0;
+    this.projectiles = [];
     this.asteroids = [];
     this.level = 0;
+    this.total_health = 2;
+    this.health = this.total_health;
     this.level_up();
 }
 
@@ -129,7 +136,11 @@ AsteroidsGame.prototype.key_handle = function(e, value) {
             break;
         case 32:
         case " ":
-            this.ship.fire_on = value;
+            if (this.health <= 0) {
+                this.reset();
+            } else {
+                this.ship.fire_on = value;
+            }
             break;
         default:
             handled_nothing = true;
@@ -154,6 +165,10 @@ AsteroidsGame.prototype.draw = function() {
     this.asteroids.forEach(function(asteroid) {
         asteroid.draw(this.c, this.guide);
     }, this);
+    if (this.health <= 0) {
+        this.game_over_indicator.draw(this.c);
+        return;
+    }
     this.ship.draw(this.c, this.guide);
     this.projectiles.forEach(function(projectile) {
         projectile.draw(this.c);
@@ -171,6 +186,9 @@ AsteroidsGame.prototype.update = function(elapsed) {
             this.ship.compromised = true;
         }
     }, this);
+    if (this.health <= 0) {
+        return;
+    }
     if (this.ship.compromised) {
         this.health -= Math.min(elapsed, this.health);
     }

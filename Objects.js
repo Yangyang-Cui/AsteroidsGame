@@ -185,13 +185,36 @@ function NumberIndicator(label, x, y) {
     this.pt = 14;
 }
 
-NumberIndicator.prototype.draw = function(c, score) {
+NumberIndicator.prototype.draw = function(c, score, options) {
+    options = options || {};
     c.save();
     c.fillStyle = "ivory";
     c.strokeStyle = "ivory";
+    // c.textAlign = "center";
+    c.textAlign = options.textAlign || "left";
     c.font = this.pt + "pt Arial";
     c.fillText(this.label, this.x, this.y + this.pt - 1);
     let offset = c.measureText(this.label).width;
     c.fillText(Math.floor(score), this.x + offset, this.y + this.pt - 1);
+    c.restore();
+}
+
+function GameOverIndicator(message_01, message_02, x, y) {
+    this.message_01 = message_01;
+    this.message_02 = message_02;
+    this.x = x;
+    this.y = y;
+    this.message_01_font = 34;
+    this.message_02_font = 14;
+}
+
+GameOverIndicator.prototype.draw = function(c) {
+    c.save();
+    c.fillStyle = "ivory";
+    c.textAlign = "center";
+    c.font = this.message_01_font + "pt Arial";
+    c.fillText(this.message_01, this.x, this.y - 1);
+    c.font = this.message_02_font + "pt Arial";
+    c.fillText(this.message_02, this.x, this.y + this.message_01_font - 1);
     c.restore();
 }

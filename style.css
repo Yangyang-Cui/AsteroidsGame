@@ -1,16 +1,16 @@
 body {
-    background-color: #666699;
+    background-color: black;
     color: ivory;
     text-align: center;
 }
 
 canvas {
     background-color: black;
-    border: 10px solid white;
+    border: 10px solid black;
 }
 
 canvas:focus {
-    border: 10px solid gray;
+    border: 10px solid rgb(137, 218, 233);
 }
 
 p {
