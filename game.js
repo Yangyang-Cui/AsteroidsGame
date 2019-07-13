@@ -36,14 +36,28 @@ function AsteroidsGame(id) {
     this.score_indicator = new NumberIndicator(
         "Score", this.canvas.width - 150, 15
     );
+    this.level_indicator = new NumberIndicator(
+        "Level", this.canvas.width / 2, 15
+    );
     this.reset();
+
     window.requestAnimationFrame(this.frame.bind(this));
 }
 
 AsteroidsGame.prototype.reset = function() {
     this.score = 0;
     this.asteroids = [];
-    this.asteroids.push(this.asteroid_live());
+    this.level = 0;
+    this.level_up();
+}
+
+AsteroidsGame.prototype.level_up = function() {
+
+    this.level += 1;
+    for (let i = 0; i < this.level; i++) {
+        this.asteroids.push(this.asteroid_live());
+    }
+
 
 }
 
@@ -136,6 +150,7 @@ AsteroidsGame.prototype.draw = function() {
     }
     this.health_indicator.draw(this.c, this.health, this.total_health);
     this.score_indicator.draw(this.c, this.score);
+    this.level_indicator.draw(this.c, this.level);
     this.asteroids.forEach(function(asteroid) {
         asteroid.draw(this.c, this.guide);
     }, this);
@@ -146,6 +161,9 @@ AsteroidsGame.prototype.draw = function() {
 }
 
 AsteroidsGame.prototype.update = function(elapsed) {
+    if (this.asteroids.length == 0) {
+        this.level_up();
+    }
     this.ship.compromised = false;
     this.asteroids.forEach(function(asteroid) {
         asteroid.update(elapsed, this.canvas);
@@ -174,6 +192,7 @@ AsteroidsGame.prototype.update = function(elapsed) {
     if (this.ship.fire_on && this.ship.projectile_reload) {
         this.projectiles.push(this.ship.projectile(elapsed));
     }
+
 }
 
 AsteroidsGame.prototype.frame = function(timestamp) {
